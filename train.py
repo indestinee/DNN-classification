@@ -14,8 +14,9 @@ def get_args():
     parse.add_argument('-b', '--batchsize', type=int, default=2048)
     parse.add_argument('-v', '--valbatchsize', type=int, default=1024)
     parse.add_argument('-s', '--snapshotstep', type=int, default=200)
-    parse.add_argument('-r', '--runid', type=str, default='dnn')
+    parse.add_argument('-r', '--runid', type=str, default='fc_dnn')
     parse.add_argument('-lr', '--learningrate', type=float, default=1e-3)
+    parse.add_argument('-m', '--modelname', type=str, default='fc_dnn')
     return parse.parse_args()
 
 args = get_args()
@@ -26,7 +27,7 @@ validation_set = utils.list_to_array(dp.val[0])
 
 # embed()
 
-net = model.network(checkpoint=args.checkpoint, learning_rate=args.learningrate)
+net = model.network(checkpoint=args.checkpoint, learning_rate=args.learningrate, name=args.model_name)
 net.model.fit(
     *train_set, validation_set=validation_set, n_epoch=args.epoch, show_metric=True,
     batch_size=args.batchsize, snapshot_step=args.snapshotstep,

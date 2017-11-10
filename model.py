@@ -6,22 +6,23 @@ import utils
 from config import cfg
 
 class network(object):
-    def __init__(self, checkpoint=None, learning_rate=1e-3):
+    def __init__(self, checkpoint=None, learning_rate=1e-3, name='dnn'):
         self.train_log = os.path.join(cfg.train_log, 'dnn')
         utils.mkdir(self.train_log)
 
-        self.models_path = os.path.join(self.train_log, 'models')
+        self.models_path = os.path.join(self.train_log, 'models', name)
         utils.mkdir(self.models_path)
 
         self.tensorboard = os.path.join(self.train_log, 'tflearn_logs')
-
         self.model = tflearn.DNN(
             self.dnn(learning_rate), checkpoint_path=self.models_path,
             tensorboard_verbose=3, tensorboard_dir=self.tensorboard,
         )
 
         if checkpoint:
+            print('[OPR] loading checkpoint from %s..' % checkpoint)
             self.model.load(checkpoint)
+            print('[SUC] checkpoint loaded..')
         
     def fc_layer(self, x, sizes):
         for i, size in enumerate(sizes):

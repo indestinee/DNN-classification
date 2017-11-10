@@ -1,4 +1,4 @@
-import os, csv, pickle, bisect
+import os, csv, pickle
 import numpy as np
 
 def mkdir(path):# {{{

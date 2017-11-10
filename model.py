@@ -10,12 +10,15 @@ class network(object):
         self.train_log = os.path.join(cfg.train_log, 'dnn')
         utils.mkdir(self.train_log)
 
-        self.models_path = os.path.join(self.train_log, 'models', name)
+        self.models_path = os.path.join(self.train_log, 'models')
         utils.mkdir(self.models_path)
+
+        self.checkpoint_path=os.path.join(self.models_path, name)
+
 
         self.tensorboard = os.path.join(self.train_log, 'tflearn_logs')
         self.model = tflearn.DNN(
-            self.dnn(learning_rate), checkpoint_path=self.models_path,
+            self.dnn(learning_rate), checkpoint_path=self.checkpoint_path,
             tensorboard_verbose=3, tensorboard_dir=self.tensorboard,
         )
 

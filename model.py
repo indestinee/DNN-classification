@@ -36,14 +36,14 @@ class network(object):
             x = tflearn.fully_connected(
                 x, channel, regularizer=regularizer,
                 weight_decay=weight_decay,
-                name='%s: fc_layer_%d' % (name, i+1),
+                name='%s__fc_layer_%d' % (name, i+1),
             )
             x = tflearn.layers.normalization.batch_normalization(
-                x, name='%s: bn_layer_%d' % (name, i+1),
+                x, name='%s__bn_layer_%d' % (name, i+1),
             )
             if i + 1 == depth:
                 x = x + input_layer
-            x = tflearn.layers.core.activation(x, activation=activation, name='%s: activation' % name)
+            x = tflearn.layers.core.activation(x, activation=activation, name='%s__activation' % name)
         return x
     # }}}
     def fc_block_bn(# {{{
@@ -54,12 +54,12 @@ class network(object):
             x = tflearn.fully_connected(
                 x, channel, regularizer=regularizer,
                 weight_decay=weight_decay,
-                name='%s: fc_layer_%d' % (name, i+1),
+                name='%s__fc_layer_%d' % (name, i+1),
             )
             x = tflearn.layers.normalization.batch_normalization(
-                x, name='%s: bn_layer_%d' % (name, i+1),
+                x, name='%s__bn_layer_%d' % (name, i+1),
             )
-            x = tflearn.layers.core.activation(x, activation=activation, name='%s: activation' % name)
+            x = tflearn.layers.core.activation(x, activation=activation, name='%s__activation' % name)
         return x
     # }}}
     def fc_block(# {{{
@@ -70,17 +70,34 @@ class network(object):
             x = tflearn.fully_connected(
                 x, channel, activation=activation,
                 regularizer=regularizer, weight_decay=weight_decay,
-                name='%s: fc_layer_%d' % (name, i+1),
+                name='%s__fc_layer_%d' % (name, i+1),
             )
             x = tflearn.dropout(x, dropout, name='dropout_layer_%d' % (i+1))
         return x
     # }}}
-    def dnn(self, learning_rate):# {{{
+
+    def res_demo(self, x):
+        x = self.fc_block_bn(x, [32] * 1, name='fc_block')
+        for i in range(2):
+            x = self.res_block_bn(x, 32, 4, name='res_block_%d' % (i+1))
+        return x
+
+    def fc_demo(self, x):
+        x = self.fc_block(
+            x, [32] * 5,
+        )
+
+    def dnn(self, learning_rate, model):# {{{
         input_layer = tflearn.input_data(shape=[None, cfg.input_shape])
         
         x = input_layer
-        x = self.fc_block(x, [32] * 5, name='fc_block')
-        x = tflearn.dropout(x, 0.8, name='dropout_layer')
+
+        if model == 'res':
+            x = self.res_demo(x)
+        elif model == 'fc':
+            x = self.fc_demo(x)
+
+        x = tflearn.dropout(x, 0.5, name='dropout_layer')
 
         x = tflearn.fully_connected(x, 2, activation='softmax', name='softmax')
 

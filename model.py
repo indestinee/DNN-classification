@@ -1,12 +1,13 @@
 import tflearn, os
 import tensorflow as tf
+from IPython import embed
 
 
 import utils
 from config import cfg
 
 class network(object):
-    def __init__(self, checkpoint=None, learning_rate=1e-3, name='dnn'):# {{{
+    def __init__(self, checkpoint=None, learning_rate=1e-3, model='fc', name='dnn'):# {{{
         self.train_log = os.path.join(cfg.train_log, name)
         utils.mkdir(self.train_log)
 
@@ -18,8 +19,10 @@ class network(object):
 
         self.tensorboard = os.path.join(self.train_log, 'tflearn_logs')
         self.model = tflearn.DNN(
-            self.dnn(learning_rate), checkpoint_path=self.checkpoint_path,
-            tensorboard_verbose=3, tensorboard_dir=self.tensorboard,
+            self.dnn(learning_rate, model=model), 
+            checkpoint_path=self.checkpoint_path,
+            tensorboard_dir=self.tensorboard,
+            tensorboard_verbose=3,
         )
 
         if checkpoint:
@@ -86,12 +89,19 @@ class network(object):
         x = self.fc_block(
             x, [32] * 5,
         )
+        return x
+
+    def loss_fun(self, x, y):
+        loss = -tf.reduce_sum(self.weights * 
+            tf.reduce_sum(y * tf.log(x), axis=1)
+        )
+        return loss
 
     def dnn(self, learning_rate, model):# {{{
-        input_layer = tflearn.input_data(shape=[None, cfg.input_shape])
+        input_layer = tflearn.input_data(shape=[None, cfg.input_shape], name='features')
+        self.weights = tflearn.input_data(shape=[None], name='weights')
         
         x = input_layer
-
         if model == 'res':
             x = self.res_demo(x)
         elif model == 'fc':
@@ -100,9 +110,8 @@ class network(object):
         x = tflearn.dropout(x, 0.5, name='dropout_layer')
 
         x = tflearn.fully_connected(x, 2, activation='softmax', name='softmax')
-
         net = tflearn.regression(
-            x, optimizer='adam', loss='categorical_crossentropy',
+            x, optimizer='adam', loss=self.loss_fun,
             learning_rate=learning_rate,
             name='target',
         )

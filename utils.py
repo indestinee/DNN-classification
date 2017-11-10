@@ -1,5 +1,6 @@
 import os, csv, pickle
 import numpy as np
+from IPython import embed
 
 def mkdir(path):# {{{
     if not os.path.isdir(path):
@@ -31,7 +32,8 @@ def load_csv(csv_file):# {{{
     if 'weight' not in keys:
         weight = None
     else:
-        weight = [each['weight'] for each in data]
+        weight = np.array([each['weight'] for each in data], np.float32)
+        weight = weight / np.sum(weight)
     print('[SUC] load_csv done..')
     return data, weight
 # }}}

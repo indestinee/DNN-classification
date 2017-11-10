@@ -8,7 +8,8 @@ class config:
     test_csv = './data/raw_data/20171103/ai_challenger_stock_test_20171103/stock_test_data_20171103.csv'
 
     input_shape = 105
-
+    train_batch_size = 249008
+    validation_batch_size = 27668
 
 cfg = config()
 

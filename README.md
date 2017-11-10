@@ -32,8 +32,12 @@ tflearn 0.3
 ## tensorboard
 ```shell
 tensorboard --logdir=./train_log/[YOUR FILE NAME]/tflearn_logs/
+make board  #   or Makefile
+
 #   e.g.
 tensorboard ./train_log/dnn/tflearn_logs/
 #   then open in browser http://localhost:6006/
+
+
 ```
 

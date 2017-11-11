@@ -1,25 +1,8 @@
-# stock
-NN for classification
+# DNN-classification
+DNN for features classification. Mainly for this <a href='https://challenger.ai/competition/trendsense/subject'>competition</a>
 
-## install
-```shell
-make install        #   Makefile
-./script/install.sh #   shell
-#   either of two can do
-```
-
-## train
-```shell
-#   1.  change config.py to set the right path of csv data
-#       only need to change train_csv, test_csv
-#       change input_shape only if the shape of features changed
-#   2.  see python3 ./train.py -h for details
-
-python3 train.py
-make train  #   use default arguments
-```
 ## requirement
-```
+```shell
 python 3.5+
 numpy
 IPython #   debug
@@ -29,15 +12,40 @@ tensorflow 1.0+
 tflearn 0.3
 ```
 
+
+## install
+```shell
+make install        #   Makefile
+./script/install.sh #   shell
+#   either of two works
+```
+
+## train
+```shell
+#   1.  change config.py to set the right path of csv data
+#       only need to change train_csv, test_csv
+#       change input_shape only if the shape of features changed
+#   2.  see python3 ./train.py -h for details
+
+python3 train.py    #   either of two works
+make train          #   use default arguments
+```
+
+## test
+```shell
+python3 test.py
+```
+
+## demo
+```shell
+see file demo
+```
+
 ## tensorboard
 ```shell
-tensorboard --logdir=./train_log/[YOUR FILE NAME]/tflearn_logs/
-make board  #   or Makefile
-
-#   e.g.
-tensorboard ./train_log/dnn/tflearn_logs/
+make board              #   Makefile
+tensorboard ./train_log #   either of two works
 #   then open in browser http://localhost:6006/
-
 
 ```
 

@@ -82,11 +82,11 @@ class network(object):
     def res_demo(self, x):
         x = self.fc_block_bn(x, [32] * 1, name='fc_block')
         for i in range(2):
-            x = self.res_block_bn(x, 32, 4, name='res_block_%d' % (i+1))
+            x = self.res_block_bn(x, 32, 3, name='res_block_%d' % (i+1))
         return x
 
     def fc_demo(self, x):
-        x = self.fc_block(
+        x = self.fc_block_bn(
             x, [32] * 5,
         )
         return x

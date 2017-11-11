@@ -12,7 +12,7 @@ def get_args():
     parse = argparse.ArgumentParser(description='dnn for classification')
     parse.add_argument('-c', '--checkpoint', type=str, default=None)
     parse.add_argument('-m', '--model', type=str, default='fc', choices=['fc', 'res'])
-    parse.add_argument('-e', '--epoch', type=int, default=10000)
+    parse.add_argument('-e', '--epoch', type=int, default=100)
     parse.add_argument('-s', '--snapshotstep', type=int, default=10)
     parse.add_argument('-b', '--batchsize', type=int, default=-1)
     parse.add_argument('-v', '--valbatchsize', type=int, default=-1)

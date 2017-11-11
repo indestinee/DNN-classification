@@ -11,3 +11,5 @@ clear:
 	./script/clear.sh
 board:
 	tensorboard --logdir=./train_log/
+prepare:
+	python3 ./data_provider.py

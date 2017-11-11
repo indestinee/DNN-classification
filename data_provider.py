@@ -11,7 +11,7 @@ class data_provider(object):
     def __init__(self, config=cfg, cache=True):
         if not cache or not os.path.isfile(cfg.data_cache):
             self.train, self.val = self.train_val_split(utils.load_csv(cfg.train_csv), 0.9)
-            self.test = utils.load_csv(cfg.test_csv)
+            self.test = utils.load_csv(cfg.test_csv, shuffle=False)
             utils.save_cache([self.train, self.val, self.test], cfg.data_cache)
         else:
             self.train, self.val, self.test = utils.load_cache(cfg.data_cache)
